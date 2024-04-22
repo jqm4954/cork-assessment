@@ -30,7 +30,10 @@ def get_all_assets():
     cursor.execute("SELECT * FROM assets")
     assets = cursor.fetchall()
     conn.close()
-    return jsonify(assets)
+    if assets:
+        return jsonify(assets)
+    else:
+        return {'message': 'No assets found.'}, 404
 
 # GET request that returns single asset given ID
 @app.route('/assets/<id>', methods=['GET'])
@@ -41,7 +44,10 @@ def get_one_asset(id):
     cursor.execute("SELECT * FROM assets WHERE id = :id", data)
     asset = cursor.fetchone()
     conn.close()
-    return jsonify(asset)
+    if asset:
+        return jsonify(asset)
+    else:
+        return {'message': 'Asset not found.'}, 404
 
 # DELETE request that removes a single asset given ID
 @app.route('/assets/<id>', methods=['DELETE'])
@@ -49,10 +55,16 @@ def delete_one_asset(id):
     conn = get_connection()
     cursor = conn.cursor()
     data = ({"id":id})
-    cursor.execute("DELETE FROM assets WHERE id=:id", data)
-    conn.commit()
-    conn.close()
-    return {'message':'Asset successfully deleted'}
+    cursor.execute("SELECT * FROM assets WHERE id=:id", data)
+    asset = cursor.fetchone()
+    if not asset:
+        conn.close()
+        return {'message': 'Asset not found'}, 404
+    else:
+        cursor.execute("DELETE FROM assets WHERE id=:id", data)
+        conn.commit()
+        conn.close()
+        return {'message':'Asset successfully deleted'}, 202
 
 # POST request to add single asset to db
 @app.route('/assets', methods=['POST'])
