@@ -32,6 +32,18 @@ def get_all_assets():
     conn.close()
     return jsonify(assets)
 
+# GET request that returns single asset given ID
+@app.route('/assets/<id>', methods=['GET'])
+def get_one_asset(id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    data = ({"id":id})
+    cursor.execute("SELECT * FROM assets WHERE id = :id", data)
+    asset = cursor.fetchone()
+    conn.close()
+    return jsonify(asset)
+
+
 if __name__ == "__main__":
     create_db()
     app.run()
