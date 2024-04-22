@@ -77,13 +77,16 @@ def post_one_asset():
                 })
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute('''INSERT INTO assets 
+    try:
+        cursor.execute('''INSERT INTO assets 
                    (name, type, serial_number, operating_system) VALUES
                    (:name, :type, :serial_number, :operating_system)
                    ''', db_data)
+    except sqlite3.IntegrityError:
+        return {'message': 'Incorrect information supplied. Please provide name, type, serial number, and operating system'}, 422
     conn.commit()
     conn.close()
-    return {'message': 'Asset successfully inserted'}
+    return {'message': 'Asset successfully inserted'}, 201
 
 
 if __name__ == "__main__":
