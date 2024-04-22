@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import sqlite3
 
 app = Flask(__name__)
@@ -53,6 +53,25 @@ def delete_one_asset(id):
     conn.commit()
     conn.close()
     return {'message':'Asset successfully deleted'}
+
+# POST request to add single asset to db
+@app.route('/assets', methods=['POST'])
+def post_one_asset():
+    incoming_data = request.get_json()
+    db_data = ({"name": incoming_data.get('name'),
+                "type": incoming_data.get('type'),
+                "serial_number": incoming_data.get('serial_number'),
+                "operating_system": incoming_data.get('operating_system')
+                })
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('''INSERT INTO assets 
+                   (name, type, serial_number, operating_system) VALUES
+                   (:name, :type, :serial_number, :operating_system)
+                   ''', db_data)
+    conn.commit()
+    conn.close()
+    return {'message': 'Asset successfully inserted'}
 
 
 if __name__ == "__main__":
