@@ -1,0 +1,14 @@
+- Given extra time, I would finish the requirement for pagination. This would help ensure faster response times under heavy loads.
+I would also include a form of authentication/verification that users must satisfy before perfoming certain actions (such as DELETE).
+Finally, I would add proper unit testing to ensure the functionality/edge cases for all the endpoints.
+
+- To make the API more secure the first thing I would do is add a layer of authentication so that unauthenticated users are not
+able to perform certain actions.
+
+- Personally, I would switch the database to be hosted on a server, and use a database such as MySQL to make it more secure. This was
+my first time using SQLite, and although it is extremely easy to use for smaller applications, it doesn't seem as scalable as databases that are
+supported on a server instead of in a file.
+
+- Overall, I spent some time before I started developing researching the tools/libraries I'd be using to complete the project. I wish I had spent a little
+longer researching these tools to make sure I was comfortable using them every step of the way. During part 2 of the project, I had to take a few steps back
+and research certain aspects of SQLite or Flask before I was able to continue development.
