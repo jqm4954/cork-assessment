@@ -15,13 +15,10 @@ response = requests.post(base+"/assets", json={"name":"device1",
                                               "operating_system": "Windows"})
 print(response.text)
 
-response = requests.get(base+"/assets")
+response = requests.get(base+"/assets/1")
 print(response.text)
 
-response = requests.delete(base+"/assets/2")
-print(response.text)
-
-response = requests.delete(base+"/assets/3")
+response = requests.delete(base+"/assets/1")
 print(response.text)
 
 response = requests.get(base+"/assets")

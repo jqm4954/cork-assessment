@@ -25,9 +25,14 @@ def create_db():
 # GET request that returns all assets from the table
 @app.route('/assets', methods=['GET'])
 def get_all_assets():
+    asset_type = request.args.get('type')
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM assets")
+    data = ({"type": asset_type})
+    if asset_type:
+        cursor.execute("SELECT * FROM assets WHERE type=:type", data)
+    else:
+        cursor.execute("SELECT * FROM assets")
     assets = cursor.fetchall()
     conn.close()
     if assets:
