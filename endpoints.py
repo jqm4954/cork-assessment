@@ -88,6 +88,30 @@ def post_one_asset():
     conn.close()
     return {'message': 'Asset successfully inserted'}, 201
 
+# POST request to update single asset
+@app.route('/assets/<id>', methods=['POST'])
+def update_asset(id):
+    incoming_data = request.get_json()
+    db_data = ({"name": incoming_data.get('name'),
+                "type": incoming_data.get('type'),
+                "serial_number": incoming_data.get('serial_number'),
+                "operating_system": incoming_data.get('operating_system'),
+                "id":id
+                })
+    conn = get_connection()
+    cursor = conn.cursor()
+    # Try updating
+    try:
+        cursor.execute('''UPDATE assets SET name=:name, 
+                       type=:type,
+                       serial_number=:serial_number
+                       operating_system=:operating_system
+                       WHERE id=:id''', db_data)
+        conn.commit()
+        return {'message':'Update successful'}, 201
+    except sqlite3.IntegrityError:
+        return {'message':'Update not successful. Please provide updated name, type, serial number, and operating system'}, 422
+
 
 if __name__ == "__main__":
     create_db()
