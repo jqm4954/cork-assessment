@@ -100,6 +100,12 @@ def update_asset(id):
                 })
     conn = get_connection()
     cursor = conn.cursor()
+    # Find asset before updating
+    cursor.execute("SELECT * FROM assets WHERE id=:id", db_data)
+    asset = cursor.fetchone()
+    if not asset:
+        return {'message':'Could not find asset. Please provide correct asset ID'}, 404
+
     # Try updating
     try:
         cursor.execute('''UPDATE assets SET name=:name, 
