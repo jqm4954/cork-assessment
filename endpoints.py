@@ -43,6 +43,17 @@ def get_one_asset(id):
     conn.close()
     return jsonify(asset)
 
+# DELETE request that removes a single asset given ID
+@app.route('/assets/<id>', methods=['DELETE'])
+def delete_one_asset(id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    data = ({"id":id})
+    cursor.execute("DELETE FROM assets WHERE id=:id", data)
+    conn.commit()
+    conn.close()
+    return {'message':'Asset successfully deleted'}
+
 
 if __name__ == "__main__":
     create_db()
